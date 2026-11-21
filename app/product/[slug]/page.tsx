@@ -1,6 +1,7 @@
 "use client";
 
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -43,23 +44,24 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           <div className="grid lg:grid-cols-12 gap-8">
             <div className="lg:col-span-7">
               <div className="relative h-[400px] rounded-2xl border border-gray-200 bg-gray-100 overflow-hidden">
-                <span className="absolute inset-0 flex items-center justify-center text-gray-400 text-xl">
-                  &#128251;
-                </span>
-                <img
+                <Image
                   src={product.images[0]}
                   alt={product.name}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority
+                  className="object-cover"
                 />
               </div>
               <div className="mt-4 flex gap-2">
                 {product.images.slice(1).map((img, i) => (
-                  <img
+                  <Image
                     key={i}
                     src={img}
                     alt=""
-                    className="h-16 w-16 rounded-xl object-cover border border-gray-200 hover:border-teal-500 cursor-pointer transition-colors"
+                    width="80"
+                    height="80"
+                    className="rounded-xl object-cover border border-gray-200 hover:border-teal-500 cursor-pointer transition-colors"
                   />
                 ))}
               </div>

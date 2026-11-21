@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createContext, useContext, useEffect, useRef, useState, useCallback, useMemo } from "react";
 import type { CartItem } from "@/lib/products";
 
 export type CartContextType = {
@@ -21,6 +21,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const writeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     try {
@@ -32,11 +33,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    try {
-      localStorage.setItem("pp_cart", JSON.stringify(items));
-    } catch {
-      // ignore
-    }
+    if (writeRef.current) clearTimeout(writeRef.current);
+    writeRef.current = setTimeout(() => {
+      try {
+        localStorage.setItem("pp_cart", JSON.stringify(items));
+      } catch {
+        // ignore
+      }
+    }, 300);
+    return () => {
+      if (writeRef.current) clearTimeout(writeRef.current);
+    };
   }, [items]);
 
   const keyOf = (item: CartItem) => `${item.productId}|${item.cartridgeId ?? ""}`;
@@ -73,14 +80,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clear = useCallback(() => setItems([]), []);
 
-  const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
+  const itemCount = useMemo(() => items.reduce((sum, i) => sum + i.quantity, 0), [items]);
 
-  // Build order-item shaped array for totals
-  const productMap: Record<string, { price: number }> = {};
-  const subtotal = items.reduce((sum, i) => {
-    const price = productMap[i.productId]?.price ?? 0;
-    return sum + price * i.quantity;
-  }, 0);
+  const productPriceMap = useMemo(() => {
+    const map: Record<string, number> = {};
+    return map;
+  }, []);
+  const subtotal = useMemo(() => items.reduce((sum, i) => sum + (productPriceMap[i.productId] ?? 0) * i.quantity, 0), [items, productPriceMap]);
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
