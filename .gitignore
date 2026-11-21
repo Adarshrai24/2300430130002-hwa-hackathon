@@ -34,3 +34,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+node_modules/
+.hwa/
+.vercel/
+.env*
+init.py
+init (*).py
+submit.py
+hwa-start.*
+dist/
