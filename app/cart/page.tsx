@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart-provider";
 import { computeOrderTotals, formatCents } from "@/lib/store";
 import { useState } from "react";
 
 export default function CartPage() {
+  const router = useRouter();
   const { items, removeItem, setQuantity, clear, itemCount } = useCart();
   const { shipping, tax, total } = computeOrderTotals(
     items.map((i) => ({ price: 8900, quantity: i.quantity })),
@@ -101,7 +103,10 @@ export default function CartPage() {
                 <span>{formatCents(total)}</span>
               </div>
             </div>
-            <button className="mt-8 w-full py-4 px-6 bg-[#D4A843] text-[#1A1A2E] font-bold rounded-xl text-lg shadow-lg hover:bg-amber-400 transition-colors">
+            <button
+              onClick={() => router.push("/checkout")}
+              className="mt-8 w-full py-4 px-6 bg-[#D4A843] text-[#1A1A2E] font-bold rounded-xl text-lg shadow-lg hover:bg-amber-400 transition-colors"
+            >
               Proceed to checkout
             </button>
             <button onClick={clear} className="mt-3 w-full py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">

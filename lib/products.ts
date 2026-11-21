@@ -59,9 +59,9 @@ export const PRODUCTS: Product[] = [
       "A modular, scent-driven puzzle feeder that adapts difficulty in real-time based on your dog's interaction patterns. Combines olfactory stimulation, mechanical problem-solving, and variable reward scheduling to keep dogs engaged for 2-4+ hours per session.",
     price: 8900,
     images: [
-      "/images/products/pulsepuzzle-hero.svg",
-      "/images/products/pulsepuzzle-side.svg",
-      "/images/products/pulsepuzzle-chambers.svg",
+      "/assets/images/products/pulsepuzzle-hero.svg",
+      "/assets/images/products/pulsepuzzle-side.svg",
+      "/assets/images/products/pulsepuzzle-chambers.svg",
     ],
     specifications: {
       "Dimensions": "180mm × 180mm × 60mm",
